@@ -5,83 +5,23 @@
 	<meta charset=utf-8>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<title>123</title>
+	<title>人脸识别+分享朋友圈</title>
 	<script src="base/js/tracking-min.js"></script>
 	<script src="base/js/face-min.js"></script>
+	<link rel="stylesheet" type="text/css" href="base/css/index.css" />
 </head>
-<style>
-	.face-capture {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.face-capture video,
-	.face-capture canvas {
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		z-index: 2;
-		background-repeat: no-repeat;
-		background-size: 100% 100%;
-	}
-
-	.face-capture canvas {
-		z-index: 2;
-	}
-
-	.face-capture .img-cover {
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		z-index: 2;
-		background-repeat: no-repeat;
-		background-size: 100% 100%;
-	}
-
-	.face-capture .rect {
-		border: 2px solid #0aeb08;
-		position: fixed;
-		z-index: 3;
-	}
-
-	.face-capture .control-container {
-		margin-top: 10rem;
-		position: relative;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		z-index: 4;
-		background-repeat: no-repeat;
-		background-size: 100% 100%;
-	}
-
-	.face-capture .title {
-		text-align: center;
-		color: white;
-		margin: 1.6rem auto;
-		font-size: 18px;
-	}
-
-	.face-capture .close {
-		width: 0.8rem;
-		height: 0.8rem;
-	}
-</style>
 
 <body>
 	<div id="app">
+		<p @click="shareFn">朋友圈分享</p>
+		<p @click="faceFn">人脸识别</p>
+		<p @click="close">关闭</p>
+		<a title="分享到微信" href="javascript:void(0)" class="bds_weixin">
+			<img src="http://images.cnblogs.com/cnblogs_com/a-cat/1193051/o_img_wechat.png" />
+		</a>
+		<div class="wechat-share">
+			<img src="http://images.cnblogs.com/cnblogs_com/a-cat/1193051/o_wechart_share.png" />
+		</div>
 		<div v-show="showContainer" class="face-capture" id="face-capture">
 			<video ref="refVideo" id="video" autoplay></video>
 			<img src="base/images/video-cover.png" alt="cover" class="img-cover" />
@@ -94,7 +34,7 @@
 				:style="{ width: item.width + 'px', height: item.height + 'px', left: item.left + 'px', top: item.top + 'px'}">
 			</div>
 		</div>
-		<img v-show="!showContainer" :src="imgUrl" />
+		<!-- <img v-show="!showContainer" :src="imgUrl" /> -->
 	</div>
 </body>
 <script src="base/js/vue.min.js" type="text/javascript"></script>
@@ -109,7 +49,7 @@
 				},
 				URL: null,
 				streamIns: null, // 视频流
-				showContainer: true, // 显示
+				showContainer: false, // 显示
 				tracker: null,
 				tipFlag: false, // 提示用户已经检测到
 				flag: false, // 判断是否已经拍照
@@ -121,9 +61,16 @@
 			}
 		},
 		mounted() {
-			this.playVideo()
+			//this.playVideo()
 		},
 		methods: {
+			faceFn() {
+				this.showContainer = true;
+				this.playVideo()
+			},
+			shareFn() {
+				console.log('我要分享')
+			},
 			// 访问用户媒体设备
 			getUserMedia(constrains, success, error) {
 				if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
