@@ -1,8 +1,18 @@
+.position{
+  position: absolute;
+  top:0;
+  left:0;
+}
+#face-capture{
+  display: none;
+}
+
 .face-capture {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
+  justify-content: center;
+  
 }
 
 .face-capture video,
