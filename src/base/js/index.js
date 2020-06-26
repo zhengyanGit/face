@@ -30,17 +30,17 @@ window.onload = function () {
       shar () {
         this.nativeShare = new NativeShare();
         var shareData = {
-          title: '分享test',
+          title: '牛人邦',
           desc: '分享test123分享test123分享test123分享test123分享test123分享test123分享test123',
           // 如果是微信该link的域名必须要在微信后台配置的安全域名之内的。
-          link: 'https://www.baidu.com/',
-          icon: 'https://www.baidu.com/img/flexible/logo/pc/result@2.png',
+          link: 'https://www.niurenbang666.com/app/',
+          icon: 'https://www.niurenbang666.com/static/img/zixun.7a26771.jpg',
           // 不要过于依赖以下两个回调，很多浏览器是不支持的
           success: function () {
-            alert('分享success')
+            alert('分享成功')
           },
           fail: function () {
-            alert('分享fail')
+            alert('分享失败')
           }
         }
         this.nativeShare.setShareData(shareData)

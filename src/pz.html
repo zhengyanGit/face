@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>拍照</title>
+</head>
+
+<body>
+  <video id="video" autoplay style="width: 480px;height: 320px"></video>
+  <!--拍照按钮-->
+  <div>
+    <button id="capture">拍照</button>
+  </div>
+  <!--描绘video截图-->
+  <canvas id="canvas" width="480" height="320"></canvas>
+  <script>
+    var video = document.getElementById('video');
+    var canvas = document.getElementById('canvas');
+    var capture = document.getElementById('capture');
+    var context = canvas.getContext('2d');
+
+    //成功回调函数
+    function success(stream) {
+      //兼容webkit核心浏览器
+      var CompatibleURL = window.URL || window.webkitURL;
+      //将视频流转化为video的源
+      if ("srcObject" in video) {
+        video.srcObject = stream;
+      } else {
+        video.src = CompatibleURL.createObjectURL(stream);
+      }
+      video.onloadedmetadata = function (e) {
+        video.play();
+      };
+    }
+    function error(error) {
+      alert('访问用户媒体失败：', error.name, error.message);
+    }
+    // 老的浏览器可能根本没有实现 mediaDevices，所以我们可以先设置一个空的对象
+    if (navigator.mediaDevices === undefined) {
+      navigator.mediaDevices = {};
+    }
+    // 一些浏览器部分支持 mediaDevices。我们不能直接给对象设置 getUserMedia 
+    // 因为这样可能会覆盖已有的属性。这里我们只会在没有getUserMedia属性的时候添加它。
+    if (navigator.mediaDevices.getUserMedia === undefined) {
+      navigator.mediaDevices.getUserMedia = function (constraints) {
+        // 首先，如果有getUserMedia的话，就获得它
+        var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        // 一些浏览器根本没实现它 - 那么就返回一个error到promise的reject来保持一个统一的接口
+        if (!getUserMedia) {
+          return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+        }
+        // 否则，为老的navigator.getUserMedia方法包裹一个Promise
+        return new Promise(function (resolve, reject) {
+          getUserMedia.call(navigator, constraints, resolve, reject);
+        });
+      }
+    }
+
+    navigator.mediaDevices.getUserMedia({ video: { width: 480, height: 320 } }).then(success, error)
+
+
+
+
+
+
+
+
+
+
+
+
+    // if (navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia) {
+    //   getUserMediaToPhoto({ video: { width: 480, height: 320 } }, success, error);
+    // } else {
+    //   alert('你的浏览器不支持访问用户媒体设备');
+    // }
+
+    capture.addEventListener('click', function () {
+      // 将video画面描绘在canvas画布上
+      context.drawImage(video, 0, 0, 480, 320);
+
+    })
+  </script>
+</body>
+
+</html>
